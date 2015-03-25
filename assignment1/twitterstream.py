@@ -1,12 +1,18 @@
 import oauth2 as oauth
 import urllib2 as urllib
+import json
 
 # See assignment1.html instructions or README for how to get these credentials
 
-api_key = "<Enter api key>"
-api_secret = "<Enter api secret>"
-access_token_key = "<Enter your access token key here>"
-access_token_secret = "<Enter your access token secret here>"
+
+with open('credentials.json') as config:    
+    config = json.load(config)
+
+
+api_key = config['api_key']
+api_secret = config['api_secret']
+access_token_key = config['access_token_key']
+access_token_secret = config['access_token_secret']
 
 _debug = 0
 
@@ -56,6 +62,8 @@ def fetchsamples():
   response = twitterreq(url, "GET", parameters)
   for line in response:
     print line.strip()
+
+
 
 if __name__ == '__main__':
   fetchsamples()
