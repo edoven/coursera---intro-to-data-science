@@ -1,16 +1,17 @@
 import sys
 import json
 
-def createTermDictionary(terms_file_path):
+
+def getDictionaryFromFile(terms_file_path):
 	termsFile = open(terms_file_path)
-	scores = {} # initialize an empty dictionary
+	scores = {}
 	for line in termsFile:
-	  term, score  = line.split("\t")  # The file is tab-delimited. "\t" means "tab character"
-	  scores[term] = int(score)  # Convert the score to an integer.
+	  term, score  = line.split("\t")
+	  scores[term] = int(score)
 	return scores
 
 
-def getJsonTweets(json_tweets_file_path):
+def getTweetsFromFile(json_tweets_file_path):
 	jsons = []
 	with open(json_tweets_file_path) as f:
 		lines = f.readlines()	
@@ -20,8 +21,6 @@ def getJsonTweets(json_tweets_file_path):
 
 
 def getSentiment(tweet, dictionary):
-	if ('text' not in tweet): #this is for 'other types of streaming messages'
-		return "#"
 	words = tweet['text'].encode('utf-8').split( )
 	score = 0
 	for word in words:
@@ -30,13 +29,19 @@ def getSentiment(tweet, dictionary):
 	return score
 
 
+def printSentiments(tweets, dictionary):
+	for tweet in tweets:	
+		if 'text' not in tweet: #this is for 'other types of streaming messages'
+			print ""
+		else:	
+			print str(getSentiment(tweet, dictionary))
+
+
 def main():
-	dictionary = createTermDictionary(sys.argv[1])
-	tweets = getJsonTweets(sys.argv[2])
-
-	for tweet in tweets:		
-		print str(getSentiment(tweet, dictionary))
-
+	dictionary = getDictionaryFromFile(sys.argv[1])
+	tweets = getTweetsFromFile(sys.argv[2])
+	printSentiments(tweets, dictionary)
+	
 
 if __name__ == '__main__':
     main()
