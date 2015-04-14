@@ -2,7 +2,7 @@ import MapReduce
 import sys
 
 """
-Word Count Example in the Simple Python MapReduce Framework
+Inverted Index Builder
 """
 
 mr = MapReduce.MapReduce()
@@ -20,11 +20,7 @@ def mapper(record):
 
 
 def reducer(key, list_of_values): 
-    list = []
-    for v in list_of_values:
-		#if v not in list: #duplicates already removed in the mapper
-		list.append(v)
-    mr.emit((key, list))
+    mr.emit((key, sorted(list_of_values)))
 
 
 # the input file is a txt file where every line has this forma: <id>,<document> 
